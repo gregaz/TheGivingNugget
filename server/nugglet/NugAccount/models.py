@@ -1,14 +1,15 @@
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 from django.db import models
 
 # Create your models here.
-class NugAccount(models.Model):
-	name = models.TextField()
-	balance = models.IntegerField()
-	linkedAccount = models.TextField()
+class UserProfile(models.Model):
+	user = models.OneToOneField(User)
+	balance = models.IntegerField( default = 0)
+	linkedAccount = models.TextField( default = '')
 
-	def __str__(self):
-		return self.name
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
 
-	class Admin:
-		list_display = ('name', 'balance')
-		search_fields = ('name',)
+post_save.connect(create_user_profile, sender=User)

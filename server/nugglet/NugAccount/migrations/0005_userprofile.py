@@ -9,15 +9,16 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('NugAccount', '0004_auto_20141013_0239'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='NugAccount',
+            name='UserProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('balance', models.IntegerField()),
-                ('linkedAccount', models.TextField()),
+                ('balance', models.IntegerField(default=0)),
+                ('linkedAccount', models.TextField(default=b'')),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
             options={

@@ -11,10 +11,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
+        migrations.AlterField(
+            model_name='nugaccount',
+            name='balance',
+            field=models.IntegerField(default=0),
+        ),
+        migrations.AlterField(
             model_name='nugaccount',
             name='linkedAccount',
-            field=models.TextField(default='default'),
-            preserve_default=False,
+            field=models.TextField(default=b''),
         ),
     ]
