@@ -3,18 +3,35 @@ from urllib import unquote
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from NugAccount.models import UserProfile
+from django.contrib.auth.models import User
 
 # Create your views here.
 def NugAccount_give(request):
 	if request.user.is_authenticated():
-		try:
-			amount = request.POST['giveamount']
-		except (KeyError):
-			# Redisplay the give form.
-			return render(request, 'give.html', {
-				'error_message': "You didn't input a value",
-			})
-		return HttpResponse('You are logged in, so you can give')
+		if request.method == 'GET':
+			return render(request, 'give.html')
+		elif request.method == 'POST':
+			try:
+				amount = request.POST['giveamount']
+			except (KeyError):
+				# Redisplay the give form.
+				return render(request, 'give.html', {
+					'error_message': "You didn't input a value",
+				})
+			usernameToGiveTo = request.user.userprofile.linkedAccount
+			
+			userToGiveTo = User.objects.get(username = usernameToGiveTo)
+			userToGiveTo.userprofile.balance = int(amount) + userToGiveTo.userprofile.balance
+			userToGiveTo.userprofile.save()
+		
+			#try:
+			#	userToGiveTo = User.objects.get(username = usernameToGiveTo)
+			#	userToGiveTo.userprofile.balance = int(amount) + userToGiveTo.userprofile.balance
+			#	userToGiveTo.save()
+			#except:
+			#	return HttpResponse(usernameToGiveTo + ' does not exist :(')
+
+			return HttpResponse('You have given ' + usernameToGiveTo + ' ' + amount +' nuggets')
 	else:
 		return HttpResponse('nil')
 
