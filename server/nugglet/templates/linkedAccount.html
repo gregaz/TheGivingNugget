@@ -1,0 +1,9 @@
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/accounts/linkedAccount/" method="post">
+{% csrf_token %}
+
+<input type="text" name="linkedAccount" />
+
+<input type="submit" value="Set" />
+</form>

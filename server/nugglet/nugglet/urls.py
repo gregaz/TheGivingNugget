@@ -7,6 +7,7 @@ urlpatterns = patterns('',
 	('^amILoggedIn/', am_I_logged_in),
 	('^accounts/profile/$', NugAccount_loggedInBalance),
 	('^accounts/give/$', NugAccount_give),
+	('^accounts/linkedAccount/$', NugAccount_setLinkedAccount),
 	('^NugAccount/', include('NugAccount.urls')),
 	(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
 	url(r'^admin/', include(admin.site.urls))

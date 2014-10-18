@@ -20,21 +20,33 @@ def NugAccount_give(request):
 				})
 			usernameToGiveTo = request.user.userprofile.linkedAccount
 			
-			userToGiveTo = User.objects.get(username = usernameToGiveTo)
-			userToGiveTo.userprofile.balance = int(amount) + userToGiveTo.userprofile.balance
-			userToGiveTo.userprofile.save()
-		
-			#try:
-			#	userToGiveTo = User.objects.get(username = usernameToGiveTo)
-			#	userToGiveTo.userprofile.balance = int(amount) + userToGiveTo.userprofile.balance
-			#	userToGiveTo.save()
-			#except:
-			#	return HttpResponse(usernameToGiveTo + ' does not exist :(')
+			try:
+				userToGiveTo = User.objects.get(username = usernameToGiveTo)
+				userToGiveTo.userprofile.balance = int(amount) + userToGiveTo.userprofile.balance
+				userToGiveTo.userprofile.save()
+			except:
+				return HttpResponse(usernameToGiveTo + ' does not exist :(')
 
 			return HttpResponse('You have given ' + usernameToGiveTo + ' ' + amount +' nuggets')
 	else:
 		return HttpResponse('nil')
 
+def NugAccount_setLinkedAccount(request):
+	if request.user.is_authenticated():
+		if request.method == 'GET':
+			return render(request, 'linkedAccount.html')
+		elif request.method == 'POST':
+			try:
+				request.user.userprofile.linkedAccount = request.POST['linkedAccount']
+				request.user.userprofile.save()
+			except (KeyError):
+				# Redisplay the give form.
+				return render(request, 'linkedAccount.html', {
+					'error_message': "You didn't input a value",
+				})
+			return HttpResponse('You have set the linkedAccount to ' + request.POST['linkedAccount'] )
+	else:
+		return HttpResponse('nil')
 
 def NugAccount_loggedInBalance(request):
 	if request.user.is_authenticated():
