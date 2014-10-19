@@ -4,8 +4,10 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from NugAccount.models import UserProfile
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
+@csrf_exempt
 def NugAccount_give(request):
 	if request.user.is_authenticated():
 		if request.method == 'GET':
@@ -31,6 +33,7 @@ def NugAccount_give(request):
 	else:
 		return HttpResponse('nil')
 
+@csrf_exempt
 def NugAccount_setLinkedAccount(request):
 	if request.user.is_authenticated():
 		if request.method == 'GET':
@@ -48,6 +51,7 @@ def NugAccount_setLinkedAccount(request):
 	else:
 		return HttpResponse('nil')
 
+@csrf_exempt
 def NugAccount_loggedInBalance(request):
 	if request.user.is_authenticated():
 		return render_to_response('balance.html',
@@ -59,10 +63,12 @@ def NugAccount_loggedInBalance(request):
 	else:
 		return HttpResponse('nil')
 
+@csrf_exempt
 def logout_view(request):
     logout(request)
     return HttpResponse('Logged out')
 
+@csrf_exempt
 def am_I_logged_in(request):
 	if request.user.is_authenticated():
 		return HttpResponse('True')
